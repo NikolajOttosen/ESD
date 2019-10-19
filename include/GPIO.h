@@ -25,6 +25,7 @@ private:
 
 public:
     GPIO();
+    GPIO(int pin_num);
     GPIO(int pin_num, std::string direction);
 
     int setPinNumber(int);

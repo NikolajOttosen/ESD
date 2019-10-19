@@ -8,52 +8,46 @@
 #include "../include/NumpadDriver.h"
 
 NumpadDriver::NumpadDriver() {
-    //init();
+    column[3] = GPIO(992);
+    column[2] = GPIO(993);
+    column[1] = GPIO(994);
+    column[0] = GPIO(995);
+
+    row[3] = GPIO(996);
+    row[2] = GPIO(997);
+    row[1] = GPIO(998);
+    row[0] = GPIO(999);
+
+    matrix =  {
+            {"1", "4", "7", "0"},
+            {"2", "5", "8", "F"},
+            {"3", "6", "9", "E"},
+            {"A", "B", "C", "D"}
+    };
+
+    for (int j = 0; j < 100; ++j) {
+        std::cout << "BEEN HERE DONE THAT!" << std::endl;
+    }
+
 }
 
 NumpadDriver::~NumpadDriver() {
-	// TODO Auto-generated destructor stub
+    for (int i = 0; i < 4; ++i) {
+        column[i].unexportPin();
+        row[i].unexportPin();
+    }
 }
 
 int NumpadDriver::init() {
-    GPIO COL4;
-    std::cout << "init()" << std::endl;
-    //GPIO COL4(992,"out");
-    //GPIO COL3(993,"out");
-
-    COL4.setPinNumber(992);
-    COL4.
-
-    GPIO COL3;
-    COL3.setPinNumber(993);
-    COL3.exportPin();
-    COL3.setPinValue("out");
-
-    std::cout << "export??" << std::endl;
-    GPIO COL2(994,"out");
-    GPIO COL1(995,"out");
-
-    GPIO ROW4(996,"in");
-    GPIO ROW3(997,"in");
-    GPIO ROW2(998,"in");
-    GPIO ROW1(999,"in");
-
-    column[0] = COL4;
-    column[1] = COL3;
-    column[2] = COL2;
-    column[3] = COL1;
-
-    row[0] = ROW4;
-    row[1] = ROW3;
-    row[2] = ROW2;
-    row[3] = ROW1;
-
-    matrix =  {
-            {"1", "2", "3", "A"},
-            {"4", "5", "6", "B"},
-            {"7", "8", "9", "C"},
-            {"0", "F", "E", "D"}
-    };
+    for (int i = 0; i < 4; ++i) {
+        column[i].exportPin();
+        column[i].setPinDirection("out");
+        row[i].exportPin();
+        row[i].setPinDirection("in");
+    }
+    for (int j = 0; j < 100; ++j) {
+        std::cout << "BEEN HERE DONE THAT!" << std::endl;
+    }
 
     return 0;
 }
@@ -64,27 +58,25 @@ std::string NumpadDriver::check() {
 
 std::string NumpadDriver::getValue() {
     std::string output;
-    int temp_i = 9;
-    int temp_j = 9;
+
+
     for (int i = 0; i < 4; ++i) {
+
+        column[0].setPinValue("1");
+        column[1].setPinValue("1");
+        column[2].setPinValue("1");
+        column[3].setPinValue("1");
         column[i].setPinValue("0");
 
         for (int j = 0; j < 4; ++j) {
 
-            if (!row[j].getPinValue(output))
+            if (row[j].getPinValue(output) == 0)
             {
                 return matrix[i][j];
-
             }
         }
-
-        column[i].setPinValue("1");
     }
 
-    return "string";
-}
-
-GPIO NumpadDriver::getGPIO() {
-    return column[0];
+    return "NULL";
 }
 

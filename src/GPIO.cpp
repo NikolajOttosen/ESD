@@ -9,13 +9,18 @@
 #include <string>
 GPIO::GPIO(){
 
-};
+}
+
+GPIO::GPIO(int pin_num){
+	setPinNumber(pin_num);
+}
 
 GPIO::GPIO(int pin_num, std::string direction){
-	setPinNumber(pin_num);
-	exportPin();
-	setPinDirection(direction);
+    setPinNumber(pin_num);
+    exportPin();
+    setPinDirection(direction);
 }
+
 
 int GPIO::writeToFile(std::string path, std::string input){
     std::ofstream path_file( path );

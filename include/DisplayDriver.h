@@ -15,23 +15,21 @@ public:
 	DisplayDriver();
     int init();
     int print(int, std::string);
-    static int clear();
+    int clear();
 
-	virtual ~DisplayDriver();
+	~DisplayDriver();
 private:
     int initGPIOs();
     int initDisplay();
     int setDataBits(std::string databits);
-    int setDataBits(int bitset);
     int pulseEnableSignal();
     int sendCommand(std::string command);
     int sendData(std::string data);
-    int sendData(char _char);
 
     GPIO data_bit[8];
-    GPIO register_select = GPIO(1012);
-    GPIO read_write = GPIO(1013);
-    GPIO enable = GPIO(1014);
+    GPIO register_select;
+    GPIO read_write;
+    GPIO enable;
 
 };
 

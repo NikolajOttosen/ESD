@@ -24,11 +24,6 @@ NumpadDriver::NumpadDriver() {
             {"3", "6", "9", "E"},
             {"A", "B", "C", "D"}
     };
-
-    for (int j = 0; j < 100; ++j) {
-        std::cout << "BEEN HERE DONE THAT!" << std::endl;
-    }
-
 }
 
 NumpadDriver::~NumpadDriver() {
@@ -44,9 +39,6 @@ int NumpadDriver::init() {
         column[i].setPinDirection("out");
         row[i].exportPin();
         row[i].setPinDirection("in");
-    }
-    for (int j = 0; j < 100; ++j) {
-        std::cout << "BEEN HERE DONE THAT!" << std::endl;
     }
 
     return 0;

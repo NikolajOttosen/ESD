@@ -17,7 +17,7 @@ public:
 	NumpadDriver();
 	int init();
     std::string check();
-	virtual ~NumpadDriver();
+	~NumpadDriver();
 
 private:
     std::string getValue();

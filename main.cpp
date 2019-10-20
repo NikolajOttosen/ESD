@@ -10,10 +10,13 @@
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
+#include <chrono>
+#include <thread>
 
 #include "include/DisplayDriver.h"
 #include "include/NumpadDriver.h"
 #include "include/GPIO.h"
+
 using namespace std;
 
 
@@ -32,8 +35,8 @@ int main() {
 
     npd.init();
 
-  //  DisplayDriver dpd;
- //   dpd.init();
+    DisplayDriver dpd;
+    dpd.init();
 
     std:string pin_value;
     while(true){

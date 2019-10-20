@@ -55,13 +55,13 @@ int DisplayDriver::initDisplay() {
 
     std::chrono::milliseconds mil(1);
     std::this_thread::sleep_for(mil*50);    //set function
-    sendCommand("Function Set");
+    sendCommand("Function");
 
     std::this_thread::sleep_for(mil);       //display set
-    sendCommand("Display Set");
+    sendCommand("Display");
 
     std::this_thread::sleep_for(mil);       //display clear
-    sendCommand("Clear Display");
+    sendCommand("Clear");
 
     std::this_thread::sleep_for(mil*20);
     sendCommand("Entry Mode");
@@ -82,7 +82,7 @@ int DisplayDriver::print(int number, std::string data) { //not sure what the int
 
 
 int DisplayDriver::clear(){
-    sendCommand("Clear Display"); //entry mode aswell??
+    sendCommand("Clear"); //entry mode aswell??
     return 0;
 }
 
@@ -121,23 +121,23 @@ int DisplayDriver::setDataBits(std::string databits) {  //send to display or to 
 
 
 int DisplayDriver::sendCommand(std::string command) {  //check reference-manual Pmod CLP instruction codes
-    if(command == "Clear Display"){ //0000 0000 01
+    if(command == "Clear"){ //0000 0000 01
         setDataBits("0000000001");
     }
 
-    if(command == "Return Home"){ //0000 0000 1x
+    else if(command == "Home"){ //0000 0000 1x
         setDataBits("0000000010");
     }
 
-    if(command == "Display Set"){  //0000 0011 11
+    else if(command == "Display"){  //0000 0011 11
         setDataBits("0000001111");
     }
 
-    if(command == "Function Set"){//0000 1110 xx
+    else if(command == "Function"){//0000 1110 xx
         setDataBits("0000111000");
     }
 
-    if(command == "Entry Mode"){  //0000 0001 10
+    else if(command == "Entry Mode"){  //0000 0001 10
         setDataBits("0000000110");
     }
 

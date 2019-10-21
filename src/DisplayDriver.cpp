@@ -36,7 +36,7 @@ DisplayDriver::~DisplayDriver() {
 }
 
 int DisplayDriver::initGPIOs() {
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 8; ++i) {
         data_bit[i].exportPin();
         data_bit[i].setPinDirection("out");;
     }
@@ -54,17 +54,22 @@ int DisplayDriver::initGPIOs() {
 int DisplayDriver::initDisplay() {
 
     std::chrono::milliseconds mil(1);
-    std::this_thread::sleep_for(mil*50);    //set function
+    std::this_thread::sleep_for(mil*23);    //set function
+
+    register_select.clear();
+    read_write.clear();
+
     sendCommand("Function");
 
-    std::this_thread::sleep_for(mil);       //display set
+    std::this_thread::sleep_for(mil*1);       //display set
     sendCommand("Display");
 
-    std::this_thread::sleep_for(mil);       //display clear
+    std::this_thread::sleep_for(mil*1);       //display clear
     sendCommand("Clear");
 
-    std::this_thread::sleep_for(mil*20);
+    std::this_thread::sleep_for(mil*5);
     sendCommand("Entry Mode");
+
 
     return 0;
 }
@@ -75,14 +80,20 @@ int DisplayDriver::init() {
     return 0;
 }
 
-int DisplayDriver::print(int number, std::string data) { //not sure what the int should do
-    sendData(data);
+int DisplayDriver::print(int address, std::string data) {
+    sendCommand("Clear");
+    std::bitset<7> foo (address);
+    std::string temp = "001" + foo.to_string();
+    setDataBits(temp);               //sets the address
+    pulseEnableSignal();
+    sendData(data);                  //sends
     return 0;
 }
 
 
 int DisplayDriver::clear(){
     sendCommand("Clear"); //entry mode aswell??
+
     return 0;
 }
 
@@ -109,18 +120,23 @@ int DisplayDriver::setDataBits(std::string databits) {  //send to display or to 
         return 0;
     }
 
-    register_select.setPinValue(databits.at(0));
-    read_write.setPinValue(databits.at(1));
+    std::string register_string(1,databits[0]);
+    std::string read_write_string(1,databits[1]);
+
+    register_select.setPinValue(register_string);
+    read_write.setPinValue(read_write_string);
 
     for (int i = 0; i < 8; ++i) {
-        data_bit[i].setPinValue(databits.at(i+2));
+        std::string s(1,databits[i+2]);
+        data_bit[i].setPinValue(s);
     }
-
+    std::cout << databits << std::endl;
     return 0;
 }
 
 
 int DisplayDriver::sendCommand(std::string command) {  //check reference-manual Pmod CLP instruction codes
+    std::cout << "command: " << command << std::endl;
     if(command == "Clear"){ //0000 0000 01
         setDataBits("0000000001");
     }
@@ -137,7 +153,7 @@ int DisplayDriver::sendCommand(std::string command) {  //check reference-manual 
         setDataBits("0000111000");
     }
 
-    else if(command == "Entry Mode"){  //0000 0001 10
+    else if(command == "Entry Mode"){  //0000 0001 11
         setDataBits("0000000110");
     }
 
@@ -145,7 +161,6 @@ int DisplayDriver::sendCommand(std::string command) {  //check reference-manual 
         std::cout << "invalid command: " << command << std::endl;
         return -1;
     }
-
     pulseEnableSignal();
     return 0;
 }

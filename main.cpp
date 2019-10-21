@@ -37,6 +37,7 @@ int main() {
 
     DisplayDriver dpd;
     dpd.init();
+   // dpd.print(1,"1234");
 
     std:string pin_value;
     while(true){
